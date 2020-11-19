@@ -1,15 +1,16 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const fs = require('fs');
-const path = require('path');
-
+const colors = require('colors');
+const connectDB = require('./config/db');
 const data = require('./data/products');
+
+const PORT = 3001 || process.env.PORT;
 
 dotenv.config();
 
-const app = express();
+connectDB();
 
-const PORT = 3001 || process.env.PORT;
+const app = express();
 
 app.get('/', (req, res) => {
 	res.send('ProShop API');
@@ -25,5 +26,7 @@ app.get('/api/products/:id', (req, res) => {
 });
 
 app.listen(PORT, () => {
-	console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+	console.log(
+		`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+	);
 });
