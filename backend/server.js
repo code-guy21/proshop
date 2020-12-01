@@ -1,8 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 const data = require('./data/products');
+const productRoutes = require('./routes/productRoutes');
 
 const PORT = 3001 || process.env.PORT;
 
@@ -16,14 +18,10 @@ app.get('/', (req, res) => {
 	res.send('ProShop API');
 });
 
-app.get('/api/products', (req, res) => {
-	res.json(data);
-});
+app.use('/api/products', productRoutes);
 
-app.get('/api/products/:id', (req, res) => {
-	const product = data.find(p => p._id === req.params.id);
-	res.json(product);
-});
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
 	console.log(
